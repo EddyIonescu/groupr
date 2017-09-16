@@ -9,7 +9,7 @@ import ReactFireMixin from 'reactfire'
 import reactMixin from 'react-mixin';
 import firebaseui from 'firebaseui';
 
-class App extends Component {
+class App extends ReactFireMixin(Component) {
   constructor() {
     super();
     const config = {
