@@ -5,12 +5,18 @@
   "dependencies": {
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "react-scripts": "1.0.13"
+    "react-scripts": "1.0.13",
+    "react-swing": "^1.0.2"
   },
   "scripts": {
     "start": "react-scripts start",
+    "flowremove": "flow-remove-types src/ -d lib/",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "flow-bin": "^0.54.1",
+    "flow-remove-types": "^1.2.1"
   }
 }
