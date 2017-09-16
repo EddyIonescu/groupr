@@ -71,7 +71,7 @@ export default class TeamCreate extends Component {
                         value={this.state.teamname} onChange={this.handlechange} /><br/>
                     <textarea name="description" placeholder="Description" required 
                         value={this.state.description} onChange={this.handlechange}></textarea><br/>
-                    <input type="number" name="teamhas" placeholder="Current Members" 
+                    <input type="number" width="100px" name="teamhas" placeholder="Current Members" 
                         min="1" max="10" required 
                         value={this.state.teamhas} onChange={this.handlechange}/><br/>
                     <input type="number" name="teamwants" placeholder = "Desired Members"
