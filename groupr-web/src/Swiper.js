@@ -17,20 +17,28 @@ export default class Swiper extends Component {
     }
 
     render() {
+        const divStyle = {
+            position: 'absolute',
+            padding: '200px',
+        };
         return (
-            <Swing
-                className="stack"
-                tagName="div"
-                setStack={stack => this.setState({ stack })}
-                ref="stack"
-                throwout={e => console.log('throwout', e)}
-            >
-                {/*
-                    children elements is will be Card
-                */}
-                <div className="card clubs" ref="card1" throwout={e => console.log('card throwout', e)}>♣</div>
-                this.props.hackerProfiles.map(profile => profile.render())
-            </Swing>
+            <div>
+                <div style={divStyle}>
+                    <Swing
+                        className="stack"
+                        tagName="div"
+                        setStack={stack => this.setState({ stack })}
+                        ref="stack"
+                        throwout={(e) => {
+                                console.log('throwout', e);
+                                e.target.hidden = true;
+                            }
+                        }
+                    >
+                        {this.props.hackerProfiles}
+                    </Swing>
+                </div>
+            </div>
         )
     }
 }

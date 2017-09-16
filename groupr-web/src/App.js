@@ -6,11 +6,33 @@ import HackerProfile from './HackerProfile'
 
 class App extends Component {
   render() {
-    let hack = (
+    let sampleData = [(
       <HackerProfile
         name="Eddy"
+        bio="hello"
+        picture="pic"
       />
-    );
+    ), (
+      <HackerProfile
+        name="Brian"
+        bio="hello"
+        picture="pic"
+      />
+    ),
+    (
+      <HackerProfile
+        name="Cindy"
+        bio="hello"
+        picture="pic"
+      />
+    ),
+    (
+      <HackerProfile
+        name="Meehakk"
+        bio="hello"
+        picture="pic"
+      />
+    )];
     return (
       <div className="App">
         <div className="App-header">
@@ -21,7 +43,7 @@ class App extends Component {
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
         <Swiper
-          hackerProfiles={[hack]}
+          hackerProfiles={sampleData}
         />
       </div>
     );
