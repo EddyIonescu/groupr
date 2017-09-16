@@ -3,8 +3,9 @@ import React, { Component } from 'react';
 
 type Props = {
     name: String,
-    header: String,
-    bio: String,
+    description: String,
+    numhas: Short,
+    numrequested: Short
 };
 
 export default class TeamProfile extends Component {
@@ -17,11 +18,14 @@ export default class TeamProfile extends Component {
     }
 
     render() {
-        const {name, header, description} = this.props;
-        <div>
-            <h2>name</h2>
-            <h1>header</h1>
-            <p>description</p>
-        </div>
+        const {name, description} = this.props;
+        return(
+            <div>
+                <h2>{ name }</h2>
+                <p>{ description }</p>
+                <p> A group of { numhas } looking for { numrequested } </p>
+            </div>
+        );
     }
 }
+
