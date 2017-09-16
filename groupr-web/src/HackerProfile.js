@@ -24,7 +24,7 @@ export default class HackerProfile extends Component {
         const {name, bio, picture} = this.props;
         return (
             <div style={divStyle}>
-                <img src = { picture }/>
+                <img draggable={false} src = { picture }/>
                 <h2>{ name }</h2>
                 <p>{ bio }</p>
             </div>
