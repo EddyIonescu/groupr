@@ -2,9 +2,15 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Swiper from './Swiper';
+import HackerProfile from './HackerProfile'
 
 class App extends Component {
   render() {
+    let hack = (
+      <HackerProfile
+        name="Eddy"
+      />
+    );
     return (
       <div className="App">
         <div className="App-header">
@@ -14,7 +20,9 @@ class App extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
-        <Swiper />
+        <Swiper
+          hackerProfiles={[hack]}
+        />
       </div>
     );
   }
