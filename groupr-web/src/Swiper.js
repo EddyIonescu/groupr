@@ -2,29 +2,43 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import Swing from 'react-swing';
 
+type Props = {
+    hackerProfiles: Array<Object>,
+    teamProfiles: Array<Object>,
+};
+
 export default class Swiper extends Component {
+
+    props: Props;
+
     constructor(props) {
         super(props);
         this.state = {};
     }
 
     render() {
+        const divStyle = {
+            position: 'absolute',
+            padding: '200px',
+        };
         return (
-            <Swing
-                className="stack"
-                tagName="div"
-                setStack={(stack)=> this.setState({stack:stack})}
-                ref="stack"
-                throwout={(e)=>console.log('throwout',e)}
-            >
-                {/*
-                    children elements is will be Card
-                */}
-                <div className="card clubs" ref="card1" throwout={(e)=>console.log('card throwout',e)}>♣</div>
-                <div className="card diamonds" ref="card2">Brian</div>
-                <div className="card hearts" ref="card3">Cindy</div>
-                <div className="card spades" ref="card4">Eddy</div>
-            </Swing>
+            <div>
+                <div style={divStyle}>
+                    <Swing
+                        className="stack"
+                        tagName="div"
+                        setStack={stack => this.setState({ stack })}
+                        ref="stack"
+                        throwout={(e) => {
+                                console.log('throwout', e);
+                                e.target.hidden = true;
+                            }
+                        }
+                    >
+                        {this.props.hackerProfiles}
+                    </Swing>
+                </div>
+            </div>
         )
     }
 }

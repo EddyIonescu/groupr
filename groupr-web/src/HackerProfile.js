@@ -17,9 +17,13 @@ export default class HackerProfile extends Component {
     }
 
     render() {
+        const divStyle = {
+            background: 'blue',
+            position: 'absolute',
+        };
         const {name, bio, picture} = this.props;
         return (
-            <div>
+            <div style={divStyle}>
                 <img src = { picture }/>
                 <h2>{ name }</h2>
                 <p>{ bio }</p>
