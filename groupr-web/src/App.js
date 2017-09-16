@@ -4,6 +4,7 @@ import './App.css';
 import Swiper from './Swiper';
 import HackerProfile from './HackerProfile';
 import firebase from 'firebase';
+import TeamCreate from './TeamCreate';
 
 class App extends Component {
   constructor() {
@@ -25,27 +26,27 @@ class App extends Component {
       <HackerProfile
         name="Eddy"
         bio="hello"
-        picture="pic"
+        picture="https://upload.wikimedia.org/wikipedia/commons/2/29/Epinephelus_malabaricus.jpg"
       />
     ), (
       <HackerProfile
         name="Brian"
         bio="hello"
-        picture="pic"
+        picture="https://upload.wikimedia.org/wikipedia/commons/2/29/Epinephelus_malabaricus.jpg"
       />
     ),
     (
       <HackerProfile
         name="Cindy"
         bio="hello"
-        picture="pic"
+        picture="https://upload.wikimedia.org/wikipedia/commons/2/29/Epinephelus_malabaricus.jpg"
       />
     ),
     (
       <HackerProfile
         name="Meehakk"
         bio="hello"
-        picture="pic"
+        picture="https://upload.wikimedia.org/wikipedia/commons/2/29/Epinephelus_malabaricus.jpg"
       />
     )];
     return (
@@ -60,6 +61,7 @@ class App extends Component {
         <Swiper
           hackerProfiles={sampleData}
         />
+        <TeamCreate />
       </div>
     );
   }
