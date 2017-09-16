@@ -7,6 +7,7 @@ import firebase from 'firebase';
 import TeamCreate from './TeamCreate';
 import ReactFireMixin from 'reactfire'
 import reactMixin from 'react-mixin';
+import firebaseui from 'firebaseui';
 
 class App extends Component {
   constructor() {
@@ -25,6 +26,40 @@ class App extends Component {
   componentWillMount () {
     var firebaseRef = firebase.database().ref('groupr/groupr-9399b');
     this.bindAsArray(firebaseRef.limitToLast(25), 'items');
+
+    // FirebaseUI config.
+    var uiConfig = {
+      callbacks: {
+        signInSuccess: function(currentUser, credential, redirectUrl) {
+          // Do something.
+          // Return type determines whether we continue the redirect automatically
+          // or whether we leave that to developer to handle.
+          console.log(currentUser, credential, redirectUrl);
+
+          return false;
+        },
+        uiShown: function() {
+          // The widget is rendered.
+          // Hide the loader.
+          document.getElementById('loader').style.display = 'none';
+        }
+      },
+      credentialHelper: firebaseui.auth.CredentialHelper.ACCOUNT_CHOOSER_COM,
+      // Query parameter name for mode.
+      queryParameterForWidgetMode: 'mode',
+      // Query parameter name for sign in success url.
+      queryParameterForSignInSuccessUrl: 'signInSuccessUrl',
+      // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
+      signInFlow: 'popup',
+      signInOptions: [
+        // Leave the lines as is for the providers you want to offer your users.
+        firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+      ],
+    };
+
+    var ui = new firebaseui.auth.AuthUI(firebase.auth());
+    // The start method will wait until the DOM is loaded.
+    ui.start('#firebaseui-auth-container', uiConfig);
   }
 
   render() {
@@ -67,16 +102,6 @@ class App extends Component {
 
         <div id="firebaseui-auth-container"></div>
         <div id="loader">Loading...</div>
-        <div id="createbio"/>
-
-        <TeamCreate />
-        {this.state.needsBio && <NewUserRegistration callback={() =>
-            {
-                console.log("not a genius");
-               this.setState({needsBio: false});
-            }}
-            />
-        }
 
         <Swiper
           hackerProfiles={sampleData}
