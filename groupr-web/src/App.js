@@ -3,7 +3,10 @@ import logo from './logo.svg';
 import './App.css';
 import Swiper from './Swiper';
 import HackerProfile from './HackerProfile'
+<<<<<<< HEAD
 var firebase = require("firebase");
+=======
+>>>>>>> send hacker profiles to swiper
 
 class App extends Component {
   constructor() {
