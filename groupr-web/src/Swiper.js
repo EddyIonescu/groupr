@@ -29,6 +29,11 @@ export default class Swiper extends Component {
                         tagName="div"
                         setStack={stack => this.setState({ stack })}
                         ref="stack"
+                        config={
+                            {
+                                allowedDirections: [Swing.DIRECTION.LEFT, Swing.DIRECTION.RIGHT]
+                            }
+                        }
                         throwout={(e) => {
                                 console.log('throwout', e);
                                 e.target.hidden = true;
