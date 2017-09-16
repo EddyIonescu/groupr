@@ -40,8 +40,20 @@ class App extends Component {
           // or whether we leave that to developer to handle.
           console.log(currentUser, credential, redirectUrl);
 
-          this.setState({needsBio: true});
-          
+          if (currentUser != null) {
+              var uid = currentUser.providerData[0].uid;
+              firebase.database().ref().child('users')
+                .orderByChild("uid")
+                .equalTo(uid)
+                .once('value', function(snapshot) {
+                    const data = snapshot.val();
+                    console.log(data);
+
+                    if (data == null)
+                        this.setState({needsBio: true});
+               }.bind(this));
+           }
+
           return false;
         }.bind(this),
         uiShown: function() {
@@ -111,7 +123,13 @@ class App extends Component {
         <div id="createbio"/>
 
         <TeamCreate />
-        {this.state.needsBio && <NewUserRegistration/> }
+        {this.state.needsBio && <NewUserRegistration callback={() =>
+            {
+                console.log("not a genius");
+               this.setState({needsBio: false}); 
+            }}
+            /> 
+        }
 
         <Swiper
           hackerProfiles={sampleData}

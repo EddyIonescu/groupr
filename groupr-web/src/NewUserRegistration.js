@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import firebase from 'firebase';
 
 type Props = {
-    
+    callback: ()=>void
 };
 
 export default class NewUserRegistration extends Component {
@@ -49,6 +49,8 @@ export default class NewUserRegistration extends Component {
                
 
             firebase.database().ref('users/'+newUserId).set(newUserData);
+
+            this.props.callback();
         } else {
             alert("Invalid user");
         }
