@@ -5,79 +5,11 @@ import Swiper from './Swiper';
 import HackerProfile from './HackerProfile';
 import firebase from 'firebase';
 import TeamCreate from './TeamCreate';
-import ReactFireMixin from 'reactfire'
-import reactMixin from 'react-mixin';
-import firebaseui from 'firebaseui';
-import NewUserRegistration from './NewUserRegistration';
+import ReactFireMixin from 'reactfire';
 
-class App extends Component {
+class App extends ReactFireMixin(Component) {
   constructor() {
     super();
-    const config = {
-      apiKey: "AIzaSyB0g6P9u0M3k-gO5E3oxjjHlnqRIwK85Nw",
-      authDomain: "groupr-9399b.firebaseapp.com",
-      databaseURL: "https://groupr-9399b.firebaseio.com",
-      projectId: "groupr-9399b",
-      storageBucket: "groupr-9399b.appspot.com",
-      messagingSenderId: "580456477433"
-    };
-    firebase.initializeApp(config);
-    this.state = {
-        needsBio: false,
-    }
-  }
-
-  componentWillMount () {
-    var firebaseRef = firebase.database().ref('groupr/groupr-9399b');
-    this.bindAsArray(firebaseRef.limitToLast(25), 'items');
-
-    // FirebaseUI config.
-    var uiConfig = {
-      callbacks: {
-        signInSuccess: function(currentUser, credential, redirectUrl) {
-          // Do something.
-          // Return type determines whether we continue the redirect automatically
-          // or whether we leave that to developer to handle.
-          console.log(currentUser, credential, redirectUrl);
-
-          if (currentUser != null) {
-              var uid = currentUser.providerData[0].uid;
-              firebase.database().ref().child('users')
-                .orderByChild("uid")
-                .equalTo(uid)
-                .once('value', function(snapshot) {
-                    const data = snapshot.val();
-                    console.log(data);
-
-                    if (data == null)
-                        this.setState({needsBio: true});
-               }.bind(this));
-           }
-
-          return false;
-        }.bind(this),
-        uiShown: function() {
-          // The widget is rendered.
-          // Hide the loader.
-          document.getElementById('loader').style.display = 'none';
-        }
-      },
-      credentialHelper: firebaseui.auth.CredentialHelper.ACCOUNT_CHOOSER_COM,
-      // Query parameter name for mode.
-      queryParameterForWidgetMode: 'mode',
-      // Query parameter name for sign in success url.
-      queryParameterForSignInSuccessUrl: 'signInSuccessUrl',
-      // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
-      signInFlow: 'popup',
-      signInOptions: [
-        // Leave the lines as is for the providers you want to offer your users.
-        firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-      ],
-    };
-
-    var ui = new firebaseui.auth.AuthUI(firebase.auth());
-    // The start method will wait until the DOM is loaded.
-    ui.start('#firebaseui-auth-container', uiConfig);
   }
 
   render() {
@@ -126,9 +58,9 @@ class App extends Component {
         {this.state.needsBio && <NewUserRegistration callback={() =>
             {
                 console.log("not a genius");
-               this.setState({needsBio: false}); 
+               this.setState({needsBio: false});
             }}
-            /> 
+            />
         }
 
         <Swiper
