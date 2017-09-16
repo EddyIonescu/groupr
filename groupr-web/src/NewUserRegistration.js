@@ -6,14 +6,14 @@ type Props = {
     
 };
 
-export default class TeamCreate extends Component {
+export default class NewUserRegistration extends Component {
 
     props: Props;
 
     constructor(props) {
         super(props);
         this.state = {
-            bio: '',
+            bio: ''
         };
 
         this.handlechange=this.handlechange.bind(this);
@@ -43,19 +43,18 @@ export default class TeamCreate extends Component {
                 uid: providerData.uid,
                 name: providerData.displayName,
                 description: this.state.bio,
-                pic: providerData.photoUrl
+                pic: providerData.photoUrl == null ? "" : providerData.photoUrl
              }
-            var newGroupId = firebase.database.ref().child('groups').push().key;
+            var newUserId = firebase.database().ref().child('users').push().key;
                
 
-            firebase.database.ref('users/'+newGroupId).set(newTeamData);
+            firebase.database().ref('users/'+newUserId).set(newUserData);
         } else {
             alert("Invalid user");
         }
     }
 
     render() {
-        const {name, description} = this.props;
         return(
             <div>
                 <form name="newUserRegForm" onSubmit={this.handleSubmit}>
