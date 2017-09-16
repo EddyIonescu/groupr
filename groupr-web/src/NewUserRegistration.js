@@ -3,28 +3,17 @@ import React, { Component } from 'react';
 import firebase from 'firebase';
 
 type Props = {
-<<<<<<< HEAD
-    callback: ()=>void
+
 };
 
 export default class NewUserRegistration extends Component {
-=======
-    
-};
-
-export default class TeamCreate extends Component {
->>>>>>> New User Reg
 
     props: Props;
 
     constructor(props) {
         super(props);
         this.state = {
-<<<<<<< HEAD
             bio: ''
-=======
-            bio: '',
->>>>>>> New User Reg
         };
 
         this.handlechange=this.handlechange.bind(this);
@@ -49,43 +38,29 @@ export default class TeamCreate extends Component {
 
         if (user != null) {
             var providerData = user.providerData[0];
+            console.log(providerData);
 
             let newUserData = {
                 uid: providerData.uid,
                 name: providerData.displayName,
                 description: this.state.bio,
-<<<<<<< HEAD
-                pic: providerData.photoUrl == null ? "" : providerData.photoUrl
+                pic: providerData.photoURL,
              }
             var newUserId = firebase.database().ref().child('users').push().key;
-               
+
 
             firebase.database().ref('users/'+newUserId).set(newUserData);
-
-            this.props.callback();
-=======
-                pic: providerData.photoUrl
-             }
-            var newGroupId = firebase.database.ref().child('groups').push().key;
-               
-
-            firebase.database.ref('users/'+newGroupId).set(newTeamData);
->>>>>>> New User Reg
         } else {
             alert("Invalid user");
         }
     }
 
     render() {
-<<<<<<< HEAD
-=======
-        const {name, description} = this.props;
->>>>>>> New User Reg
         return(
             <div>
                 <form name="newUserRegForm" onSubmit={this.handleSubmit}>
                     <h2> New User Setup </h2>
-                    <textarea name="bio" placeholder="Biography" required 
+                    <textarea name="bio" placeholder="Biography" required
                         value={this.state.description} onChange={this.handlechange}></textarea><br/>
                     <input type="submit" id="submitButton" className="btn" placeholder="Submit Bio"/><br/>
                 </form>
@@ -93,4 +68,3 @@ export default class TeamCreate extends Component {
         );
     }
 }
-
