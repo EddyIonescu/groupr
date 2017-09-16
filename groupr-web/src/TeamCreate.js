@@ -53,9 +53,9 @@ export default class TeamCreate extends Component {
                 description: this.state.description
             }
 
-            var newGroupId = firebase.database.ref().child('groups').push().key;
+            var newGroupId = firebase.database().ref().child('groups').push().key;
 
-            firebase.database.ref('groups/'+newGroupId).set(newTeamData);
+            firebase.database().ref('groups/'+newGroupId).set(newTeamData);
         } else {
             alert("Invalid user");
         }

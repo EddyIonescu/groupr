@@ -8,6 +8,7 @@ import TeamCreate from './TeamCreate';
 import ReactFireMixin from 'reactfire'
 import reactMixin from 'react-mixin';
 import firebaseui from 'firebaseui';
+import NewUserRegistration from './NewUserRegistration';
 
 class App extends Component {
   constructor() {
@@ -21,6 +22,9 @@ class App extends Component {
       messagingSenderId: "580456477433"
     };
     firebase.initializeApp(config);
+    this.state = {
+        needsBio: false,
+    }
   }
 
   componentWillMount () {
@@ -36,8 +40,22 @@ class App extends Component {
           // or whether we leave that to developer to handle.
           console.log(currentUser, credential, redirectUrl);
 
+          if (currentUser != null) {
+              var uid = currentUser.providerData[0].uid;
+              firebase.database().ref().child('users')
+                .orderByChild("uid")
+                .equalTo(uid)
+                .once('value', function(snapshot) {
+                    const data = snapshot.val();
+                    console.log(data);
+
+                    if (data == null)
+                        this.setState({needsBio: true});
+               }.bind(this));
+           }
+
           return false;
-        },
+        }.bind(this),
         uiShown: function() {
           // The widget is rendered.
           // Hide the loader.
@@ -102,11 +120,21 @@ class App extends Component {
 
         <div id="firebaseui-auth-container"></div>
         <div id="loader">Loading...</div>
+        <div id="createbio"/>
+
+        <TeamCreate />
+        {this.state.needsBio && <NewUserRegistration callback={() =>
+            {
+                console.log("not a genius");
+               this.setState({needsBio: false}); 
+            }}
+            /> 
+        }
 
         <Swiper
           hackerProfiles={sampleData}
         />
-        <TeamCreate />
+
       </div>
     );
   }
