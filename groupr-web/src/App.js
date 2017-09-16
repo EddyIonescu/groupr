@@ -2,17 +2,14 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Swiper from './Swiper';
-import HackerProfile from './HackerProfile'
-<<<<<<< HEAD
-var firebase = require("firebase");
-=======
->>>>>>> send hacker profiles to swiper
+import HackerProfile from './HackerProfile';
+import firebase from 'firebase';
 
 class App extends Component {
   constructor() {
     super();
     // Initialize Firebase
-    var config = {
+    const config = {
       apiKey: "AIzaSyB0g6P9u0M3k-gO5E3oxjjHlnqRIwK85Nw",
       authDomain: "groupr-9399b.firebaseapp.com",
       databaseURL: "https://groupr-9399b.firebaseio.com",
@@ -55,10 +52,10 @@ class App extends Component {
       <div className="App">
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
+          <h2>Welcome to Groupr</h2>
         </div>
         <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
+          To get started, create a profile and get groupin.
         </p>
         <Swiper
           hackerProfiles={sampleData}
