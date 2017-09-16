@@ -4,6 +4,9 @@ import './App.css';
 import Swiper from './Swiper';
 import HackerProfile from './HackerProfile';
 import firebase from 'firebase';
+import TeamCreate from './TeamCreate';
+
+var firebase = require("firebase");
 
 class App extends Component {
   constructor() {
@@ -60,6 +63,7 @@ class App extends Component {
         <Swiper
           hackerProfiles={sampleData}
         />
+        <TeamCreate />
       </div>
     );
   }
