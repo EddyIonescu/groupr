@@ -42,24 +42,28 @@ export default class GroupView extends Component {
                     let individual = snapshot.val();
                     console.log(individual);
                     if (individual && individual.liked) {
-                        firebase.database().ref('users')
-                                           .orderByChild('uid')
-                                           .equalTo(individual.userID)
-                                           .once('value', snapshot => {
+                        firebase.database()
+                            .ref('users')
+                            .orderByChild('uid')
+                            .equalTo(individual.userID)
+                            .once('value', snapshot => {
 
-                                                let user = snapshot.val();
-                                                console.log(user);
+                                let user = snapshot.val();
+                                let unwrappeduser = user[Object.keys(user)[0]]
 
-                                                this.setState({
-                                                    matches: this.state.matches.concat([
-                                                    <HackerProfile 
-                                                        key={user.uid}
-                                                        name={user.name}
-                                                        bio={user.bio}
-                                                        picture={user.pic}/>
-                                                    ])
-                                                });
-                                            });
+                                console.log(unwrappeduser.name);
+                                console.log(unwrappeduser.pic);
+                                console.log(unwrappeduser.description);
+
+                                this.setState({
+                                    matches: this.state.matches.concat([
+                                    <HackerProfile 
+                                        name={unwrappeduser.name}
+                                        bio={unwrappeduser.description}
+                                        picture={unwrappeduser.pic}/>
+                                    ])
+                                });
+                            });
                    }
                 });
         }
