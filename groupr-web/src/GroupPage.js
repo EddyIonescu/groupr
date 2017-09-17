@@ -43,8 +43,11 @@ export default class GroupPage extends Component {
                         } else {
                             this.setState(
                                 { groupMade: true,
-                                  groupId: group.id
+                                  groupId: Object.keys(group)[0]
                                 });
+                            console.log("GROUP ID:" + Object.keys(group)[0])
+                            console.log("GROUP" + group)
+                            console.log(this.state.groupId)
                         }
                     });
         }
