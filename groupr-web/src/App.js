@@ -133,10 +133,6 @@ class App extends Component {
         }
         <GroupView groupID="-KuBNBpIyMSTWWLBzREj"/>
 
-        <Swiper
-          hackerProfiles={sampleData}
-        />
-
       </div>
     );
   }
