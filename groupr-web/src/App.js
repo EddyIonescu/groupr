@@ -173,14 +173,21 @@ class App extends Component {
     return (
       <div className="App">
         <div className="App-header jumbotron my-blue-class">
-          <h2>Welcome to Groupr</h2>
+          <span className="navbar-brand">Groupr. </span>
+          <span className="resizing">Creating pending connections. </span>
         </div>
         <p className="App-intro">
-          To get started, create a profile and get groupin.
+          Create a profile to complete your group.
         </p>
 
         <input type="button" id="toggle" value="Toggle Group/Individual Mode" onClick={this.toggleMode}/>
         {!this.state.signedIn && <div id="firebaseui-auth-container"></div>}
+
+        <div id="firebaseui-auth-container"></div>
+
+
+        <div id="loader">Loading...</div>
+        <div id="createbio"/>
 
         {this.state.needsBio && <NewUserRegistration callback={() =>
             {
