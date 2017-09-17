@@ -7,6 +7,7 @@ import GroupView from "./GroupView";
 import TeamCreate from "./TeamCreate";
 
 type Props = {
+    visibility: Boolean,
 };
 
 export default class GroupPage extends Component {
@@ -52,10 +53,14 @@ export default class GroupPage extends Component {
 
     render() {
         return(
-            <div>
-                {this.state.groupMade && (<GroupView groupId = {this.state.groupId}/>)}
-                {!this.state.groupMade && (<TeamCreate />)}
-            </div>
+                <div>
+            {this.props.visibility && 
+                <div>
+                    {this.state.groupMade && (<GroupView groupId = {this.state.groupId}/>)}
+                    {!this.state.groupMade && (<TeamCreate />)}
+                </div>
+                    }
+                </div>
         );
     }
 }
