@@ -22,6 +22,7 @@ export default class GroupView extends Component {
         this.refresh=this.refresh.bind(this);
 
         this.refresh();
+        console.log(this.props.groupId)
     }
 
     handlechange = (e) => {
@@ -35,9 +36,10 @@ export default class GroupView extends Component {
         var user = firebase.auth().currentUser;
         if (user) {
             var uid = user.providerData[0].uid;
-            firebase.database().ref().child('groups/'+this.props.groupID)
+            firebase.database().ref().child('groups/'+this.props.groupId)
                 .child('reactions')
                 .on('value', snapshot => {
+                    console.log(this.props.groupId);
                     let individual = snapshot.val();
                     console.log(individual);
                     if (individual && individual.liked) {
