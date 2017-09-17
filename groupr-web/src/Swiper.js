@@ -21,6 +21,10 @@ export default class Swiper extends Component {
             position: 'absolute',
             padding: '200px',
         };
+
+        console.log("Rendered Swiper");
+        console.log(this.props.hackerProfiles);
+
         return (
             <div>
                 <div style={divStyle}>
@@ -40,7 +44,11 @@ export default class Swiper extends Component {
                             }
                         }
                     >
-                        {this.props.hackerProfiles}
+                    {this.props.hackerProfiles.map((profile, i) => (
+                        <div key={i}>
+                            {profile}
+                        </div>)
+                    )}
                     </Swing>
                 </div>
             </div>

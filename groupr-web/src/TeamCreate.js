@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import firebase from 'firebase';
 
 type Props = {
-    
+
 };
 
 export default class TeamCreate extends Component {
@@ -42,7 +42,7 @@ export default class TeamCreate extends Component {
         if (user != null) {
 
             var providerData = user.providerData[0];
-            
+
             let newTeamData = {
                 active: true,
                 teamName: this.state.teamname,
@@ -53,9 +53,9 @@ export default class TeamCreate extends Component {
                 description: this.state.description
             }
 
-            var newGroupId = firebase.database.ref().child('groups').push().key;
+            var newGroupId = firebase.database().ref().child('groups').push().key;
 
-            firebase.database.ref('groups/'+newGroupId).set(newTeamData);
+            firebase.database().ref('groups/'+newGroupId).set(newTeamData);
         } else {
             alert("Invalid user");
         }
@@ -67,15 +67,15 @@ export default class TeamCreate extends Component {
             <div>
                 <form name="createTeamForm" onSubmit={this.handleSubmit}>
                     <h2> New Group </h2>
-                    <input type="text" name="teamname" placeholder="Group Name" required 
+                    <input type="text" name="teamname" placeholder="Group Name" required
                         value={this.state.teamname} onChange={this.handlechange} /><br/>
-                    <textarea name="description" placeholder="Description" required 
+                    <textarea name="description" placeholder="Description" required
                         value={this.state.description} onChange={this.handlechange}></textarea><br/>
-                    <input type="number" width="100px" name="teamhas" placeholder="Current Members" 
-                        min="1" max="10" required 
+                    <input type="number" width="100px" name="teamhas" placeholder="Current Members"
+                        min="1" max="10" required
                         value={this.state.teamhas} onChange={this.handlechange}/><br/>
                     <input type="number" name="teamwants" placeholder = "Desired Members"
-                        min="1" max="10" required 
+                        min="1" max="10" required
                         value={this.state.teamwants} onChange={this.handlechange}/><br/>
                     <input type="submit" id="submitButton" className="btn" placeholder="Create Group"/><br/>
                 </form>
@@ -83,4 +83,3 @@ export default class TeamCreate extends Component {
         );
     }
 }
-
