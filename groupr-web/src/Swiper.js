@@ -43,7 +43,7 @@ export default class Swiper extends Component {
                         }
                         throwout={(e) => {
                                 console.log('throwout', e);
-                                console.log(e.target.id);
+                                console.log('target id', e.target.id);
                                 e.target.hidden = true;
                                 this.props.swipeCallback(
                                   e.throwDirection === Swing.DIRECTION.RIGHT,
@@ -52,8 +52,8 @@ export default class Swiper extends Component {
                             }
                         }
                     >
-                    {this.props.hackerProfiles.map((profile) => (
-                        <div key={profile.key} id={profile.key}>
+                    {this.props.hackerProfiles.map((profile, i) => (
+                        <div key={i} id={profile.key}>
                             {profile}
                         </div>)
                     )}

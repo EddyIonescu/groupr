@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import firebase from 'firebase';
 import TeamCreate from './TeamCreate';
-import GroupView from './GroupView';
+import GroupPage from './GroupPage';
 import ReactFireMixin from 'reactfire'
 import reactMixin from 'react-mixin';
 import firebaseui from 'firebaseui';
@@ -28,7 +28,16 @@ class App extends Component {
         groups: [],
         signedIn: false,
         userId: '',
+        groupMode: false,
     }
+
+    this.toggleMode=this.toggleMode.bind(this);
+  }
+
+  toggleMode() {
+    this.setState({
+        groupMode: !this.state.groupMode
+        });
   }
 
   componentWillMount () {
@@ -42,14 +51,22 @@ class App extends Component {
           // Do something.
           // Return type determines whether we continue the redirect automatically
           // or whether we leave that to developer to handle.
-          this.setState({needsBio: true});
+           if (currentUser != null) {
+               var uid = currentUser.providerData[0].uid;
+               firebase.database()
+                .ref().child('users')
+                .orderByChild("uid")
+                .equalTo(uid)
+                .once('value', function(snapshot) {
+                    const data = snapshot.val();
+                    console.log(data);
+                    if (data == null)
+                        this.setState({needsBio: true});
+                    }.bind(this));
+                }
+
           return false;
         }.bind(this),
-        uiShown: function() {
-          // The widget is rendered.
-          // Hide the loader.
-          document.getElementById('loader').style.display = 'none';
-        }
       },
       credentialHelper: firebaseui.auth.CredentialHelper.ACCOUNT_CHOOSER_COM,
       // Query parameter name for mode.
@@ -71,10 +88,35 @@ class App extends Component {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.setState({ signedIn: true });
+        console.log("SIGNED IN")
 
         const userId = user.providerData[0].uid;
         this.setState({ userId });
         // User is signed in.
+
+        firebase.database().ref().child('users').orderByChild('uid')
+          .equalTo(userId).once('value', snapshot => {
+            const reactions = Object.values(snapshot.val())[0].reactions;
+            let match = null;
+
+            Object.keys(reactions).forEach((key) => {
+              if (match || !reactions[key]) {
+                return false;
+              }
+              match = key;
+            });
+            if (match) {
+              firebase.database().ref('groups/' + match)
+                .once('value', snapshot => {
+                  const {
+                    creatorid,
+                    teamName,
+                  } = snapshot.val();
+                  alert('Congratulations! You\'ve been matched with group '
+                    + teamName + '!');
+                });
+            }
+          });
 
         let groups = [];
         firebase.database().ref('groups').on('value', (snapshot) => {
@@ -109,6 +151,7 @@ class App extends Component {
               );
             }
           });
+          this.refs.groupPage.onAuthComplete();
         });
       } else {
         // User is signed out.
@@ -133,20 +176,20 @@ class App extends Component {
           To get started, create a profile and get groupin.
         </p>
 
-        <div id="firebaseui-auth-container"></div>
-        <div id="loader">Loading...</div>
-        <div id="createbio"/>
+        <input type="button" id="toggle" value="Toggle Group/Individual Mode" onClick={this.toggleMode}/>
+        {!this.state.signedIn && <div id="firebaseui-auth-container"></div>}
 
-        <TeamCreate />
         {this.state.needsBio && <NewUserRegistration callback={() =>
             {
                this.setState({needsBio: false});
             }}
             />
         }
-        <GroupView groupID="-KuBNBpIyMSTWWLBzREj"/>
 
-        {this.state.signedIn && (<Swiper
+        <GroupPage visibility={this.state.signedIn && !this.state.needsBio && this.state.groupMode} ref="groupPage"/>
+
+        {this.state.signedIn && !this.state.needsBio && !this.state.groupMode &&
+        (<Swiper
           hackerProfiles={this.state.groups}
           swipeCallback={this.swipeCallback}
         />)}
