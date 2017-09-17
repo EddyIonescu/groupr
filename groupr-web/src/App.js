@@ -96,6 +96,9 @@ class App extends Component {
 
         firebase.database().ref().child('users').orderByChild('uid')
           .equalTo(userId).once('value', snapshot => {
+            if (!snapshot.val()) {
+              return false;
+            }
             const reactions = Object.values(snapshot.val())[0].reactions;
             if (!reactions) {
               return false;
@@ -176,11 +179,14 @@ class App extends Component {
           <span className="navbar-brand">Groupr. </span>
           <span className="resizing">Creating pending connections. </span>
         </div>
-        <p className="App-intro">
-          Create a profile to complete your group.
-        </p>
-
-        <input type="button" id="toggle" value="Toggle Group/Individual Mode" onClick={this.toggleMode}/>
+        {this.state.signedIn &&
+          <div>
+            <p className="App-intro">
+              Create a profile to complete your group.
+            </p>
+            <input type="button" id="toggle" value="Toggle Group/Individual Mode" onClick={this.toggleMode}/>
+          </div>
+        }
         {!this.state.signedIn && <div id="firebaseui-auth-container"></div>}
 
         {this.state.needsBio && <NewUserRegistration callback={() =>

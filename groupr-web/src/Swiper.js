@@ -23,6 +23,7 @@ export default class Swiper extends Component {
         const divStyle = {
             position: 'absolute',
             padding: '200px',
+            float: 'center',
         };
 
         console.log("Rendered Swiper");

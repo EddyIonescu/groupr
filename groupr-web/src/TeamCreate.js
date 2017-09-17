@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import firebase from 'firebase';
 
 type Props = {
-    
+
 };
 
 export default class TeamCreate extends Component {
@@ -42,7 +42,7 @@ export default class TeamCreate extends Component {
         if (user != null) {
 
             var providerData = user.providerData[0];
-            
+
             let newTeamData = {
                 active: true,
                 teamName: this.state.teamname,
@@ -53,9 +53,9 @@ export default class TeamCreate extends Component {
                 description: this.state.description
             }
 
-            var newGroupId = firebase.database.ref().child('groups').push().key;
+            var newGroupId = firebase.database().ref().child('groups').push().key;
 
-            firebase.database.ref('groups/'+newGroupId).set(newTeamData);
+            firebase.database().ref('groups/'+newGroupId).set(newTeamData);
         } else {
             alert("Invalid user");
         }
@@ -68,16 +68,15 @@ export default class TeamCreate extends Component {
                 <form name="createTeamForm" onSubmit={this.handleSubmit}>
                     <span className="App-intro">Create New Group</span>
                     <br/>
-                    
-                    <input type="text" style = {{width: 400}} name="Teamname" placeholder="Group Name" required 
+                    <input type="text" style = {{width: 400}} name="teamname" placeholder="Group Name" required
                         value={this.state.teamname} onChange={this.handlechange} /><br/>
-                    <textarea name="description" style = {{width: 400}} placeholder="Description" required 
+                    <textarea name="description" style = {{width: 400}} placeholder="Description" required
                         value={this.state.description} onChange={this.handlechange}></textarea><br/>
-                    <input type="number" style = {{width: 400}} name="teamhas" placeholder="Current Members" 
-                        min="1" max="10" required 
+                    <input type="number" style = {{width: 400}} name="teamhas" placeholder="Current Members"
+                        min="1" max="10" required
                         value={this.state.teamhas} onChange={this.handlechange}/><br/>
                     <input type="number" style = {{width: 400}} name="teamwants" placeholder = "Desired Members"
-                        min="1" max="10" required 
+                        min="1" max="10" required
                         value={this.state.teamwants} onChange={this.handlechange}/><br/>
                     <input type="submit" id="submitButton" className="btn" className="wrapperleft" placeholder="Create Group"/><br/>
                 </form>
@@ -85,4 +84,3 @@ export default class TeamCreate extends Component {
         );
     }
 }
-
