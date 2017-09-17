@@ -34,7 +34,7 @@ export default class GroupView extends Component {
     refresh() {
         console.log("In Refresh");
         var user = firebase.auth().currentUser;
-        if (user != null) {
+        if (user) {
             var uid = user.providerData[0].uid;
             firebase.database().ref().child('groups/'+this.props.groupID)
                 .child('reactions')
