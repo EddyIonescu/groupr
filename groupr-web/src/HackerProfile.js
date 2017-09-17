@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 
 type Props = {
+    key: String,
     name: String,
     bio: String,
     picture: String
@@ -31,4 +32,3 @@ export default class HackerProfile extends Component {
         );
     }
 }
-
