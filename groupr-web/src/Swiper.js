@@ -21,6 +21,10 @@ export default class Swiper extends Component {
             position: 'absolute',
             padding: '200px',
         };
+
+        console.log("Rendered Swiper");
+        console.log(this.props.hackerProfiles);
+
         return (
             <div>
                 <div style={divStyle}>

@@ -5,6 +5,7 @@ import Swiper from './Swiper';
 import HackerProfile from './HackerProfile';
 import firebase from 'firebase';
 import TeamCreate from './TeamCreate';
+import GroupView from './GroupView';
 import ReactFireMixin from 'reactfire'
 import reactMixin from 'react-mixin';
 import firebaseui from 'firebaseui';
@@ -130,6 +131,7 @@ class App extends Component {
             }}
             /> 
         }
+        <GroupView groupID="-KuBNBpIyMSTWWLBzREj"/>
 
         <Swiper
           hackerProfiles={sampleData}
