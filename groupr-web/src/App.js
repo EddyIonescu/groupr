@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Swiper from './Swiper';
-import HackerProfile from './HackerProfile';
 import firebase from 'firebase';
 import TeamCreate from './TeamCreate';
 import ReactFireMixin from 'reactfire'
 import reactMixin from 'react-mixin';
 import firebaseui from 'firebaseui';
 import NewUserRegistration from './NewUserRegistration';
+import TeamList from './TeamList';
+import HackerProfile from './HackerProfile';
 
 class App extends Component {
   constructor() {
@@ -24,6 +24,8 @@ class App extends Component {
     firebase.initializeApp(config);
     this.state = {
         needsBio: false,
+        groups: [],
+        signedIn: false,
     }
   }
 
@@ -38,22 +40,7 @@ class App extends Component {
           // Do something.
           // Return type determines whether we continue the redirect automatically
           // or whether we leave that to developer to handle.
-          console.log(currentUser, credential, redirectUrl);
-
-          if (currentUser != null) {
-              var uid = currentUser.providerData[0].uid;
-              firebase.database().ref().child('users')
-                .orderByChild("uid")
-                .equalTo(uid)
-                .once('value', function(snapshot) {
-                    const data = snapshot.val();
-                    console.log(data);
-
-                    if (data == null)
-                        this.setState({needsBio: true});
-               }.bind(this));
-           }
-
+          this.setState({needsBio: true});
           return false;
         }.bind(this),
         uiShown: function() {
@@ -78,36 +65,49 @@ class App extends Component {
     var ui = new firebaseui.auth.AuthUI(firebase.auth());
     // The start method will wait until the DOM is loaded.
     ui.start('#firebaseui-auth-container', uiConfig);
+
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.setState({ signedIn: true });
+
+        const userId = user.providerData[0].uid;
+        // User is signed in.
+
+        let groups = [];
+        firebase.database().ref('groups').on('value', (snapshot) => {
+          Object.values(snapshot.val()).forEach((group) => {
+            if (group.creatorid !== userId) {
+              const {
+                teamName,
+                description,
+                creatorid,
+              } = group;
+
+              firebase.database().ref('users').orderByChild('uid')
+                .equalTo(creatorid).once('value', (snapshot) => {
+                  let groupProfile = (
+                    <HackerProfile
+                      key={group.key}
+                      name={teamName}
+                      bio={description}
+                      picture={Object.values(snapshot.val())[0].pic}
+                    />
+                  );
+                  groups.push(groupProfile);
+                  this.setState({ groups });
+                }
+              );
+            }
+          });
+        });
+      } else {
+        // User is signed out.
+        console.log('user is signed out');
+      }
+    });
   }
 
   render() {
-    let sampleData = [(
-      <HackerProfile
-        name="Eddy"
-        bio="hello"
-        picture="https://upload.wikimedia.org/wikipedia/commons/2/29/Epinephelus_malabaricus.jpg"
-      />
-    ), (
-      <HackerProfile
-        name="Brian"
-        bio="hello"
-        picture="https://upload.wikimedia.org/wikipedia/commons/2/29/Epinephelus_malabaricus.jpg"
-      />
-    ),
-    (
-      <HackerProfile
-        name="Cindy"
-        bio="hello"
-        picture="https://upload.wikimedia.org/wikipedia/commons/2/29/Epinephelus_malabaricus.jpg"
-      />
-    ),
-    (
-      <HackerProfile
-        name="Meehakk"
-        bio="hello"
-        picture="https://upload.wikimedia.org/wikipedia/commons/2/29/Epinephelus_malabaricus.jpg"
-      />
-    )];
     return (
       <div className="App">
         <div className="App-header">
@@ -123,18 +123,8 @@ class App extends Component {
         <div id="createbio"/>
 
         <TeamCreate />
-        {this.state.needsBio && <NewUserRegistration callback={() =>
-            {
-                console.log("not a genius");
-               this.setState({needsBio: false}); 
-            }}
-            /> 
-        }
-
-        <Swiper
-          hackerProfiles={sampleData}
-        />
-
+        {this.state.needsBio && <NewUserRegistration/> }
+        {this.state.signedIn && <TeamList teams={this.state.groups} />}
       </div>
     );
   }
