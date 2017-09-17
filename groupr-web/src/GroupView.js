@@ -41,12 +41,13 @@ export default class GroupView extends Component {
                 .on('value', snapshot => {
                     console.log(this.props.groupId);
                     let individual = snapshot.val();
+                    let userid = Object.keys(individual)[0]
                     console.log(individual);
-                    if (individual && individual.liked) {
+                    if (individual && individual[userid]) {
                         firebase.database()
                             .ref('users')
                             .orderByChild('uid')
-                            .equalTo(individual.userID)
+                            .equalTo(userid)
                             .once('value', snapshot => {
 
                                 let user = snapshot.val();
