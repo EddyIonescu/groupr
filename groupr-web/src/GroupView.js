@@ -69,10 +69,23 @@ export default class GroupView extends Component {
         }
     }
 
+    swipeCallback = (liked, groupId) => {
+        if (liked) {
+            // MATCH
+        }
+        firebase.database().ref('groups/' + groupId + '/reactions').set({
+          [this.state.userId]: liked,
+        });
+    }
+
     render() {
         return(
             <div>
-                <Swiper id="profiles" hackerProfiles={this.state.matches}/>
+                <Swiper 
+                    id="profiles"
+                    hackerProfiles={this.state.matches}
+                    swipeCallback={this.swipeCallback}
+                />
                 <input id="refreshButton" type="button" value="Refresh" onClick={this.refresh}/>
             </div>
         );
