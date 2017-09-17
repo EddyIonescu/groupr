@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import firebase from 'firebase';
 import TeamCreate from './TeamCreate';
-import GroupView from './GroupView';
+import GroupPage from './GroupPage';
 import ReactFireMixin from 'reactfire'
 import reactMixin from 'react-mixin';
 import firebaseui from 'firebaseui';
@@ -109,6 +109,7 @@ class App extends Component {
               );
             }
           });
+          this.refs.groupPage.onAuthComplete();
         });
       } else {
         // User is signed out.
@@ -137,14 +138,13 @@ class App extends Component {
         <div id="loader">Loading...</div>
         <div id="createbio"/>
 
-        <TeamCreate />
         {this.state.needsBio && <NewUserRegistration callback={() =>
             {
-               this.setState({needsBio: false});
+               this.setState({needsBio: false}); 
             }}
             />
         }
-        <GroupView groupID="-KuBNBpIyMSTWWLBzREj"/>
+        <GroupPage ref="groupPage"/>
 
         {this.state.signedIn && (<Swiper
           hackerProfiles={this.state.groups}
