@@ -5,7 +5,7 @@ import Swiper from './Swiper';
 import HackerProfile from './HackerProfile';
 
 type Props = {
-    groupID: String,
+    groupId: String,
 };
 
 export default class GroupView extends Component {
@@ -39,10 +39,12 @@ export default class GroupView extends Component {
             firebase.database().ref().child('groups/'+this.props.groupId)
                 .child('reactions')
                 .on('value', snapshot => {
-                    console.log(this.props.groupId);
                     let individual = snapshot.val();
-                    let userid = Object.keys(individual)[0]
-                    console.log(individual);
+
+                    if (!individual) {
+                      return false;
+                    }
+                    let userid = Object.keys(individual)[0];
                     if (individual && individual[userid]) {
                         firebase.database()
                             .ref('users')
@@ -51,11 +53,18 @@ export default class GroupView extends Component {
                             .once('value', snapshot => {
 
                                 let user = snapshot.val();
-                                let unwrappeduser = user[Object.keys(user)[0]]
+                                let unwrappeduser = user[Object.keys(user)[0]];
+                                const reactions = unwrappeduser.reactions;
+
+                                if (reactions &&
+                                  (reactions[this.props.groupId] === true || reactions[this.props.groupId] === false)) {
+                                  return false;
+                                }
 
                                 this.setState({
                                     matches: this.state.matches.concat([
-                                    <HackerProfile 
+                                    <HackerProfile
+                                        key={unwrappeduser.uid}
                                         name={unwrappeduser.name}
                                         bio={unwrappeduser.description}
                                         picture={unwrappeduser.pic}/>
@@ -67,19 +76,24 @@ export default class GroupView extends Component {
         }
     }
 
-    swipeCallback = (liked, groupId) => {
-        if (liked) {
-            // MATCH
-        }
-        firebase.database().ref('groups/' + groupId + '/reactions').set({
-          [this.state.userId]: liked,
-        });
+    swipeCallback = (liked, userid) => {
+      firebase.database()
+          .ref('users')
+          .orderByChild('uid')
+          .equalTo(userid)
+          .once('value', snapshot => {
+            let user = snapshot.val();
+            const userId = Object.keys(user)[0];
+            firebase.database().ref('users/' + userId + '/reactions').set({
+              [this.props.groupId]: liked,
+            });
+          });
     }
 
     render() {
         return(
             <div>
-                <Swiper 
+                <Swiper
                     id="profiles"
                     hackerProfiles={this.state.matches}
                     swipeCallback={this.swipeCallback}
@@ -89,4 +103,3 @@ export default class GroupView extends Component {
         );
     }
 }
-

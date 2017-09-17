@@ -94,6 +94,30 @@ class App extends Component {
         this.setState({ userId });
         // User is signed in.
 
+        firebase.database().ref().child('users').orderByChild('uid')
+          .equalTo(userId).once('value', snapshot => {
+            const reactions = Object.values(snapshot.val())[0].reactions;
+            let match = null;
+
+            Object.keys(reactions).forEach((key) => {
+              if (match || !reactions[key]) {
+                return false;
+              }
+              match = key;
+            });
+            if (match) {
+              firebase.database().ref('groups/' + match)
+                .once('value', snapshot => {
+                  const {
+                    creatorid,
+                    teamName,
+                  } = snapshot.val();
+                  alert('Congratulations! You\'ve been matched with group '
+                    + teamName + '!');
+                });
+            }
+          });
+
         let groups = [];
         firebase.database().ref('groups').on('value', (snapshot) => {
           Object.keys(snapshot.val()).forEach((key) => {
@@ -157,14 +181,14 @@ class App extends Component {
 
         {this.state.needsBio && <NewUserRegistration callback={() =>
             {
-               this.setState({needsBio: false}); 
+               this.setState({needsBio: false});
             }}
             />
         }
 
         <GroupPage visibility={this.state.signedIn && !this.state.needsBio && this.state.groupMode} ref="groupPage"/>
-        
-        {this.state.signedIn && !this.state.needsBio && !this.state.groupMode && 
+
+        {this.state.signedIn && !this.state.needsBio && !this.state.groupMode &&
         (<Swiper
           hackerProfiles={this.state.groups}
           swipeCallback={this.swipeCallback}

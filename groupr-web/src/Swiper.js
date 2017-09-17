@@ -43,7 +43,7 @@ export default class Swiper extends Component {
                         }
                         throwout={(e) => {
                                 console.log('throwout', e);
-                                console.log(e.target.id);
+                                console.log('target id', e.target.id);
                                 e.target.hidden = true;
                                 this.props.swipeCallback(
                                   e.throwDirection === Swing.DIRECTION.RIGHT,
