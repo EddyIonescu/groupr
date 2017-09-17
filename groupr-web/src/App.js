@@ -183,6 +183,12 @@ class App extends Component {
         <input type="button" id="toggle" value="Toggle Group/Individual Mode" onClick={this.toggleMode}/>
         {!this.state.signedIn && <div id="firebaseui-auth-container"></div>}
 
+        <div id="firebaseui-auth-container"></div>
+
+
+        <div id="loader">Loading...</div>
+        <div id="createbio"/>
+
         {this.state.needsBio && <NewUserRegistration callback={() =>
             {
                this.setState({needsBio: false});
