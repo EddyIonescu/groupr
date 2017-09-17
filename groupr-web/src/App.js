@@ -24,7 +24,7 @@ class App extends Component {
     };
     firebase.initializeApp(config);
     this.state = {
-        needsBio: false,
+        needsBio: true,
         groups: [],
         signedIn: false,
         userId: '',
@@ -42,14 +42,22 @@ class App extends Component {
           // Do something.
           // Return type determines whether we continue the redirect automatically
           // or whether we leave that to developer to handle.
-          this.setState({needsBio: true});
+           if (currentUser != null) {
+               var uid = currentUser.providerData[0].uid;
+               firebase.database()
+                .ref().child('users')
+                .orderByChild("uid")
+                .equalTo(uid)
+                .once('value', function(snapshot) {
+                    const data = snapshot.val();
+                    console.log(data);
+                    if (data == null)
+                        this.setState({needsBio: true});
+                    }.bind(this));
+                }
+
           return false;
         }.bind(this),
-        uiShown: function() {
-          // The widget is rendered.
-          // Hide the loader.
-          document.getElementById('loader').style.display = 'none';
-        }
       },
       credentialHelper: firebaseui.auth.CredentialHelper.ACCOUNT_CHOOSER_COM,
       // Query parameter name for mode.
@@ -71,6 +79,7 @@ class App extends Component {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.setState({ signedIn: true });
+        console.log("SIGNED IN")
 
         const userId = user.providerData[0].uid;
         this.setState({ userId });
@@ -134,9 +143,7 @@ class App extends Component {
           To get started, create a profile and get groupin.
         </p>
 
-        <div id="firebaseui-auth-container"></div>
-        <div id="loader">Loading...</div>
-        <div id="createbio"/>
+        {!this.state.signedIn && <div id="firebaseui-auth-container"></div>}
 
         {this.state.needsBio && <NewUserRegistration callback={() =>
             {
@@ -144,9 +151,10 @@ class App extends Component {
             }}
             />
         }
-        <GroupPage ref="groupPage"/>
 
-        {this.state.signedIn && (<Swiper
+        <GroupPage visibility={this.state.signedIn && !this.state.needsBio} ref="groupPage"/>
+        
+        {this.state.signedIn && !this.state.needsBio && (<Swiper
           hackerProfiles={this.state.groups}
           swipeCallback={this.swipeCallback}
         />)}
