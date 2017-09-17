@@ -189,6 +189,12 @@ class App extends Component {
         }
         {!this.state.signedIn && <div id="firebaseui-auth-container"></div>}
 
+        <div id="firebaseui-auth-container"></div>
+
+
+        <div id="loader">Loading...</div>
+        <div id="createbio"/>
+
         {this.state.needsBio && <NewUserRegistration callback={() =>
             {
                this.setState({needsBio: false});
