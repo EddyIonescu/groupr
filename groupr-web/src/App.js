@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import firebase from 'firebase';
 import TeamCreate from './TeamCreate';
+import GroupView from './GroupView';
 import ReactFireMixin from 'reactfire'
 import reactMixin from 'react-mixin';
 import firebaseui from 'firebaseui';
@@ -123,8 +124,17 @@ class App extends Component {
         <div id="createbio"/>
 
         <TeamCreate />
-        {this.state.needsBio && <NewUserRegistration/> }
-        {this.state.signedIn && <TeamList teams={this.state.groups} />}
+        {this.state.needsBio && <NewUserRegistration callback={() =>
+            {
+                console.log("not a genius");
+               this.setState({needsBio: false}); 
+            }}
+            /> 
+        }
+        <GroupView groupID="-KuBNBpIyMSTWWLBzREj"/>
+
+        {this.state.signedIn && (<TeamList teams={this.state.groups} />)}
+
       </div>
     );
   }
