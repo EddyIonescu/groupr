@@ -97,6 +97,9 @@ class App extends Component {
         firebase.database().ref().child('users').orderByChild('uid')
           .equalTo(userId).once('value', snapshot => {
             const reactions = Object.values(snapshot.val())[0].reactions;
+            if (!reactions) {
+              return false;
+            }
             let match = null;
 
             Object.keys(reactions).forEach((key) => {
