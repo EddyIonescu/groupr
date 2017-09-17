@@ -4,7 +4,6 @@
   font-family: sans-serif;
   font-weight: bolder;
   color: black;
-  background-color: #2996e2!important;
 
 }
 
@@ -44,7 +43,7 @@
   font-style: bold;
   font-weight: bolder;
   color: white;
-  
+
 }
 
 .navbar-brand {
@@ -100,7 +99,7 @@
   text-align: center;
   display: inline-block;
   position: absolute;
-  top: 80%;
+  top: 90%;
   left: 50%;
 
 }
@@ -109,7 +108,7 @@
   text-align: center;
   display: inline-block;
   position: absolute;
-  top: 80%;
+  top: 90%;
   right: 50%;
 
 }
