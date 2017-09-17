@@ -40,7 +40,11 @@ export default class Swiper extends Component {
                             }
                         }
                     >
-                        {this.props.hackerProfiles}
+                    {this.props.hackerProfiles.map((profile, i) => (
+                        <div key={i}>
+                            {profile}
+                        </div>)
+                    )}
                     </Swing>
                 </div>
             </div>
