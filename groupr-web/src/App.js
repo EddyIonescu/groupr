@@ -24,11 +24,20 @@ class App extends Component {
     };
     firebase.initializeApp(config);
     this.state = {
-        needsBio: true,
+        needsBio: false,
         groups: [],
         signedIn: false,
         userId: '',
+        groupMode: false,
     }
+
+    this.toggleMode=this.toggleMode.bind(this);
+  }
+
+  toggleMode() {
+    this.setState({
+        groupMode: !this.state.groupMode
+        });
   }
 
   componentWillMount () {
@@ -143,6 +152,7 @@ class App extends Component {
           To get started, create a profile and get groupin.
         </p>
 
+        <input type="button" id="toggle" value="Toggle Group/Individual Mode" onClick={this.toggleMode}/>
         {!this.state.signedIn && <div id="firebaseui-auth-container"></div>}
 
         {this.state.needsBio && <NewUserRegistration callback={() =>
@@ -152,9 +162,10 @@ class App extends Component {
             />
         }
 
-        <GroupPage visibility={this.state.signedIn && !this.state.needsBio} ref="groupPage"/>
+        <GroupPage visibility={this.state.signedIn && !this.state.needsBio && this.state.groupMode} ref="groupPage"/>
         
-        {this.state.signedIn && !this.state.needsBio && (<Swiper
+        {this.state.signedIn && !this.state.needsBio && !this.state.groupMode && 
+        (<Swiper
           hackerProfiles={this.state.groups}
           swipeCallback={this.swipeCallback}
         />)}
