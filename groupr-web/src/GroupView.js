@@ -32,7 +32,6 @@ export default class GroupView extends Component {
     }
 
     refresh() {
-        console.log("In Refresh");
         var user = firebase.auth().currentUser;
         if (user) {
             var uid = user.providerData[0].uid;
@@ -50,10 +49,6 @@ export default class GroupView extends Component {
 
                                 let user = snapshot.val();
                                 let unwrappeduser = user[Object.keys(user)[0]]
-
-                                console.log(unwrappeduser.name);
-                                console.log(unwrappeduser.pic);
-                                console.log(unwrappeduser.description);
 
                                 this.setState({
                                     matches: this.state.matches.concat([
