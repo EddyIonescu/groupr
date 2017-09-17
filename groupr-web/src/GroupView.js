@@ -98,7 +98,7 @@ export default class GroupView extends Component {
                     hackerProfiles={this.state.matches}
                     swipeCallback={this.swipeCallback}
                 />
-                <input id="refreshButton" type="button" value="Refresh" onClick={this.refresh}/>
+                <input id="refreshButton" type="button" className="wrapperright" value="Refresh" onClick={this.refresh}/>
             </div>
         );
     }
