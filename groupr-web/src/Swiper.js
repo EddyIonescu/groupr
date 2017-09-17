@@ -3,8 +3,10 @@ import logo from './logo.svg';
 import Swing from 'react-swing';
 
 type Props = {
+    key: string,
     hackerProfiles: Array<Object>,
     teamProfiles: Array<Object>,
+    swipeCallback: boolean => void,
 };
 
 export default class Swiper extends Component {
@@ -17,6 +19,7 @@ export default class Swiper extends Component {
     }
 
     render() {
+        console.log('props', this.props);
         const divStyle = {
             position: 'absolute',
             padding: '200px',
@@ -40,12 +43,17 @@ export default class Swiper extends Component {
                         }
                         throwout={(e) => {
                                 console.log('throwout', e);
+                                console.log(e.target.id);
                                 e.target.hidden = true;
+                                this.props.swipeCallback(
+                                  e.throwDirection === Swing.DIRECTION.RIGHT,
+                                  e.target.id,
+                                );
                             }
                         }
                     >
-                    {this.props.hackerProfiles.map((profile, i) => (
-                        <div key={i}>
+                    {this.props.hackerProfiles.map((profile) => (
+                        <div key={profile.key} id={profile.key}>
                             {profile}
                         </div>)
                     )}

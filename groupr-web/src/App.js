@@ -8,8 +8,8 @@ import ReactFireMixin from 'reactfire'
 import reactMixin from 'react-mixin';
 import firebaseui from 'firebaseui';
 import NewUserRegistration from './NewUserRegistration';
-import TeamList from './TeamList';
 import HackerProfile from './HackerProfile';
+import Swiper from './Swiper';
 
 class App extends Component {
   constructor() {
@@ -27,6 +27,7 @@ class App extends Component {
         needsBio: false,
         groups: [],
         signedIn: false,
+        userId: '',
     }
   }
 
@@ -72,23 +73,31 @@ class App extends Component {
         this.setState({ signedIn: true });
 
         const userId = user.providerData[0].uid;
+        this.setState({ userId });
         // User is signed in.
 
         let groups = [];
         firebase.database().ref('groups').on('value', (snapshot) => {
-          Object.values(snapshot.val()).forEach((group) => {
+          Object.keys(snapshot.val()).forEach((key) => {
+            const group = snapshot.val()[key];
             if (group.creatorid !== userId) {
               const {
                 teamName,
                 description,
                 creatorid,
+                reactions,
               } = group;
 
+              if (reactions &&
+                (reactions[userId] === true || reactions[userId] === false)) {
+                return false;
+              }
+
               firebase.database().ref('users').orderByChild('uid')
-                .equalTo(creatorid).once('value', (snapshot) => {
+                .equalTo(creatorid).once('value', (snapshot, i) => {
                   let groupProfile = (
                     <HackerProfile
-                      key={group.key}
+                      key={key}
                       name={teamName}
                       bio={description}
                       picture={Object.values(snapshot.val())[0].pic}
@@ -105,6 +114,12 @@ class App extends Component {
         // User is signed out.
         console.log('user is signed out');
       }
+    });
+  }
+
+  swipeCallback = (liked, groupId) => {
+    firebase.database().ref('groups/' + groupId + '/reactions').set({
+      [this.state.userId]: liked,
     });
   }
 
@@ -125,14 +140,16 @@ class App extends Component {
         <TeamCreate />
         {this.state.needsBio && <NewUserRegistration callback={() =>
             {
-                console.log("not a genius");
-               this.setState({needsBio: false}); 
+               this.setState({needsBio: false});
             }}
-            /> 
+            />
         }
         <GroupView groupID="-KuBNBpIyMSTWWLBzREj"/>
 
-        {this.state.signedIn && (<TeamList teams={this.state.groups} />)}
+        {this.state.signedIn && (<Swiper
+          hackerProfiles={this.state.groups}
+          swipeCallback={this.swipeCallback}
+        />)}
 
       </div>
     );
